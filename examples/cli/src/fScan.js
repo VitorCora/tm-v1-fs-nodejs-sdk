@@ -1,5 +1,7 @@
 import { AmaasGrpcClient, AmaasCredentials } from 'file-security-sdk';
 import loggerConfig from './loggerConfig';
+import axios from 'axios';
+import fs from 'fs';
 
 const amaasHostName = process.env?.TM_AM_SERVER_ADDR ?? '';
 const key = process.env?.TM_AM_AUTH_KEY ?? '';
@@ -9,12 +11,23 @@ const credent: AmaasCredentials = {
 };
 const useKey = false;
 
-const runFileScan = async (fileName, presignedurl, tags, pml = true, smt = true, feedback) => {
-  const file = fileName || presignedUrl;
-  if (!file) {
-    console.error('Please provide either a fileName (-f) or a presignedUrl (-u).');
-    return;
-  }
+const downloadFile = async (presignedUrl, filePath) => {
+  const writer = fs.createWriteStream(filePath);
+  const response = await axios({
+    url: presignedUrl,
+    method: 'GET',
+    responseType: 'stream',
+  });
+
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on('finish', resolve);
+    writer.on('error', reject);
+  });
+};
+
+const runFileScan = async (file, tags, pml = true, smt = true) => {
   console.log(`\nScanning '${file}'`);
   const amaasGrpcClient = useKey
     ? new AmaasGrpcClient(amaasHostName, key)
@@ -23,7 +36,7 @@ const runFileScan = async (fileName, presignedurl, tags, pml = true, smt = true,
   loggerConfig(amaasGrpcClient);
 
   try {
-    const result = await amaasGrpcClient.scanFile(file, tags, pml, feedback);
+    const result = await amaasGrpcClient.scanFile(file, tags, pml, smt);
     console.log(`${JSON.stringify(result)}`);
   } catch (err) {
     console.error(err);
@@ -73,7 +86,7 @@ if (presignedUrl) {
   downloadFile(presignedUrl, filePath)
     .then(() => {
       console.log('File downloaded successfully.');
-      runFileScan(filePath, tags, pml, smt);
+      runFileScan(filePath, tags, pml, smt)
         .then(() => console.log('File scan completed successfully'))
         .catch(error => console.error('Error occurred during file scan:', error));
     })
@@ -82,7 +95,7 @@ if (presignedUrl) {
   if (!fileName) {
     console.error('Please provide either a fileName (-f) or a presignedUrl (-u).');
   } else {
-    runFileScan(fileName, tags, pml, smt);
+    runFileScan(fileName, tags, pml, smt)
       .then(() => console.log('File scan completed successfully'))
       .catch(error => console.error('Error occurred during file scan:', error));
   }
