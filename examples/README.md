@@ -46,6 +46,12 @@ The following instructions assumes you are at the `<top level>/client/ts/example
 
 5. Build the example using one of the following commands:
 
+   - fScan (Scan files or PresignedURLs or downloadable files):
+
+   ```sh
+   SOURCE=fScan.ts npm run build # cli
+   ```
+   
    - fileScan:
 
    ```sh
@@ -86,12 +92,33 @@ The following instructions assumes you are at the `<top level>/client/ts/example
    SOURCE=batchBufferScan.js npm run build # cli-esm
    ```
 
-6. Run the example using following command:
+**6. Run the example using following command:**
+**Only for fScan**
+   ```sh
+   npm run client -- (-f #FILEPATH or -u $URL) --pml (true or false) --smt (true or false)
+
+*** Testing an eicar .png
+
+  - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/32231f0f-c8b6-4bfa-b8b6-c269a020bc26)
+
+*** Testing a random eicar.txt
+
+   - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/e970949e-5a27-4140-8095-a5063197202a)
+
+
+*** Testing a presigned URL
+   - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/af0b8702-7208-40a0-8237-7566e673b61d)
+
+
+
+
+
+   ```
+6.1 Run the example using following command:
 
    ```sh
    npm run client
    ```
-
 ### LAMBDA / LAMBDA-ESM
 
 1. Create a new Lambda function. Go to the AWS Lambda console and click "Create function". Choose "Author from scratch" and fill in the following details:
