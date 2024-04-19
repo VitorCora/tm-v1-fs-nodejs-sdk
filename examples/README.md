@@ -96,23 +96,6 @@ The following instructions assumes you are at the `<top level>/client/ts/example
 **Only for fScan**
    ```sh
    npm run client -- (-f #FILEPATH or -u $URL) --pml (true or false) --smt (true or false)
-
-*** Testing an eicar .png
-
-  - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/32231f0f-c8b6-4bfa-b8b6-c269a020bc26)
-
-*** Testing a random eicar.txt
-
-   - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/e970949e-5a27-4140-8095-a5063197202a)
-
-
-*** Testing a presigned URL
-   - ![image](https://github.com/VitorCora/tm-v1-fs-nodejs-sdk/assets/59590152/af0b8702-7208-40a0-8237-7566e673b61d)
-
-
-
-
-
    ```
 6.1 Run the example using following command:
 
